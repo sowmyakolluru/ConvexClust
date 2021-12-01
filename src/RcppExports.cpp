@@ -11,6 +11,18 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// ComputeWeights_c
+arma::mat ComputeWeights_c(const arma::mat& X, double mu);
+RcppExport SEXP _ConvexClust_ComputeWeights_c(SEXP XSEXP, SEXP muSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< double >::type mu(muSEXP);
+    rcpp_result_gen = Rcpp::wrap(ComputeWeights_c(X, mu));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpparma_hello_world
 arma::mat rcpparma_hello_world();
 RcppExport SEXP _ConvexClust_rcpparma_hello_world() {
@@ -56,6 +68,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_ConvexClust_ComputeWeights_c", (DL_FUNC) &_ConvexClust_ComputeWeights_c, 2},
     {"_ConvexClust_rcpparma_hello_world", (DL_FUNC) &_ConvexClust_rcpparma_hello_world, 0},
     {"_ConvexClust_rcpparma_outerproduct", (DL_FUNC) &_ConvexClust_rcpparma_outerproduct, 1},
     {"_ConvexClust_rcpparma_innerproduct", (DL_FUNC) &_ConvexClust_rcpparma_innerproduct, 1},
