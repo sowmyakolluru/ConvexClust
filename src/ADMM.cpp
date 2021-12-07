@@ -38,6 +38,14 @@ double primal_residual_c(arma::mat& U, arma::mat& V, arma::mat& index,int p, int
   return(residual_primal);
 }
 
+arma::colvec vector_1(arma::colvec& Y, int j, int p, arma::colvec& k, int n) {
+  for(int i = 0; i < n; i++)
+  {
+    k(i) = p*(Y(i)-1) - Y(i)*(Y(i)-1)/2 + j - Y(i);
+  }
+  //return the index value
+  return(k);
+}
 
 
 
