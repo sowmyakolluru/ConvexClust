@@ -25,9 +25,15 @@ arma::uvec xbar_c(arma::mat& X, int p, int q) {
   return(xbar);
 }
 
-arma::uvec primal_residual_c(arma::mat& U, arma::mat& V, arma::mat& index,int p, int q, int nK) {
+double primal_residual_c(arma::mat& U, arma::mat& V, arma::mat& index,int p, int q, int nK) {
   // Initialize required parameters
-
+  arma::mat L(q,nK);
+  arma::colvec index_1 = index.col(1);
+  arma::colvec index_2 = index.col(2);
+  for(int i = 0; i < nK; i++){
+     L.col(i) = U.col(index_1(i)) - U.col(index_2(i));
+  }
+  double residual_primal = sqrt(arma::accu(arma::pow(L - V, 2)));
   //return residual_primal vector
   return(residual_primal);
 }
