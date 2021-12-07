@@ -10,7 +10,7 @@
 
 arma::uvec xbar_c(arma::mat& X, int p, int q) {
   // Initialize required parameters
-  arma::uvec xbar(q);
+  arma::colvec xbar(q);
   for(int i = 0; i < q; i++)
   {
     int sum = 0;
@@ -24,3 +24,16 @@ arma::uvec xbar_c(arma::mat& X, int p, int q) {
   //return xbar vector
   return(xbar);
 }
+
+arma::uvec primal_residual_c(arma::mat& U, arma::mat& V, arma::mat& index,int p, int q, int nK) {
+  // Initialize required parameters
+
+  //return residual_primal vector
+  return(residual_primal);
+}
+
+
+
+
+
+
