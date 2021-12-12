@@ -64,7 +64,11 @@ $$
 **Update of V:**
 
 $$
-V_l^{t+1} = \arg\min_{V_l}\{\frac{\gamma  w_l}{\tau}\|v_l\| + \frac{1}{2\tau}(\|V_l - (u_{l1} - u_{l2} - \frac{H_l}{\tau}\|_2^2\}
+V_l^{t+1} = \arg\min_{V_l}\{\frac{\gamma  w_l}{\tau}\|v_l\| + \frac{1}{2\tau}(\|V_l - (u_{l1} - u_{l2} - \frac{H_l}{\tau})\|_2^2\}
+$$
+
+$$
+V_l^{t+1} = prox_\frac{\gamma  w_l}{\tau}(u_{l1}^{t+1} - u_{l2}^{t+1} + \frac{H^{t}}{\tau})
 $$
 
 **Update of H:** 
