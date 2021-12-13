@@ -2,16 +2,27 @@
 % Please edit documentation in R/ComputeWeights_wrapper.R
 \name{ComputeWeights}
 \alias{ComputeWeights}
-\title{Title}
+\title{Compute Kernel Weights}
 \usage{
 ComputeWeights(X, mu)
 }
 \arguments{
-\item{mu}{}
+\item{X}{A data matrix of dimensions p x n}
+
+\item{mu}{The non-negative parameter that controls the scaling of kernel weights}
 }
 \value{
-
+Returns a matrix of dimensions number of pairs by 1
 }
 \description{
-Title
+This function computes weights w_ij using exp(−mu * ||ai − aj||_2^2). (i,j) are the pairs possible for given data matrix.
+The weight matrix has dimensions of one column with rows of Number of pairs.
+}
+\examples{
+#Test on multidimensional case
+X = matrix(c(rep(1, 10), rep(0, 10)))
+multipleDimensionX = t(cbind(X, X, X))
+w <- ComputeWeights(multipleDimensionX, mu = 1)
+
+
 }

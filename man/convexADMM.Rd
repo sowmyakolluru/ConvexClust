@@ -2,30 +2,47 @@
 % Please edit documentation in R/ConvexCluster_wrapper.R
 \name{convexADMM}
 \alias{convexADMM}
-\title{Title}
+\title{Convex Clustering Algorithm}
 \usage{
-convexADMM(
-  X,
-  Lambda,
-  ix,
-  M1,
-  M2,
-  s1,
-  s2,
-  w,
-  gamma,
-  nu,
-  num_iter = 100,
-  tol_abs = 1e-05,
-  tol_rel = 1e-04
-)
+convexADMM(X, H, U = NULL, V, w, gamma, tau, num_iter = 100)
 }
 \arguments{
-\item{tol_rel}{}
+\item{X}{A data matrix of dimensions p x n}
+
+\item{H}{A matrix of Lagrange Multipliers with dimensions p x nk where nk is number of pairs of weights possible}
+
+\item{U}{An optional matrix of initial cluster centroids of dimensions p by n}
+
+\item{V}{A matrix of centroid differences of dimensions p by nk initialized as a NULL matrix}
+
+\item{w}{A vector of kernel weights of k elements}
+
+\item{gamma}{Regularization parameter}
+
+\item{tau}{Non-negative tuning parameter}
+
+\item{num_iter}{numIter Optional integer defining maximum number of iterations for the algorithm (default is 100)}
 }
 \value{
-
+Returns a list of matrices U,V and H at convergence
 }
 \description{
-Title
+This function wrapper implements ADMM algorithm written in c++ to solve the convex clustering problem.
+Given n data points in p dimensions,the key idea behind the convex clustering model
+is that if two observations in the data points
+belong to the same cluster, then their corresponding centroids.
+}
+\examples{
+X = matrix(c(rep(1, 10), rep(0, 10)))
+multipleDimensionX = t(cbind(X, X, X))
+w <- ComputeWeights(multipleDimensionX, mu = 1)
+n <- ncol(multipleDimensionX)
+p <- nrow(multipleDimensionX)
+nk <- nrow(w)
+H <- matrix(0,p,nk)
+V <- matrix(0, nrow = p, ncol = nk)
+gamma <- 0.5
+tau <- 1.0
+
+
 }

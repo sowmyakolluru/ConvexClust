@@ -13,7 +13,7 @@
 The DESCRIPTION file:
 \packageDESCRIPTION{ConvexClust}
 \packageIndices{ConvexClust}
-~~ An overview of how to use the package, including the most important functions ~~
+The package implements ADMM algorithm in order to perform clustering on the given n set of data points with p features. The clustering process starts with calculating weight matrix using ComputeWeights_wrapper.R and then ConvexCluster_wrapper takes these weights as one of the inputs and computes ADMM algorithm that returns centroid matrix, centroid difference matrix and Lagrange multiplier matrix.
 }
 \author{
 \packageAuthor{ConvexClust}
@@ -21,15 +21,9 @@ The DESCRIPTION file:
 Maintainer: \packageMaintainer{ConvexClust}
 }
 \references{
-~~ Literature or other references for background information ~~
+Eric C. Chi and Kenneth Lange (2015) Splitting Methods for Convex Clustering,
+\emph{Journal of Computational and Graphical Statistics, Vol. 24, No. 4 (DECEMBER 2015),
+pp. 994-1013},
+\doi{https://www.jstor.org/stable/24737215}
 }
-~~ Optionally other standard keywords, one per line, from file KEYWORDS in the R ~~
-~~ documentation directory ~~
-\keyword{ package }
-\seealso{
-~~ Optional links to other man pages, e.g. ~~
-~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
-}
-\examples{
-~~ simple examples of the most important functions ~~
-}
+
