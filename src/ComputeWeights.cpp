@@ -8,12 +8,12 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 
 //Function to compute weights using exp(−mu * ||ai − aj||_2^2)
-// X - n x p matrix
+// X - p by n matrix
 // mu - given positive constant
 // [[Rcpp::export]]
 arma::mat ComputeWeights_c(const arma::mat& X, double mu) {
   // Initialize some parameters
-  int n = X.n_rows;
+  int n = X.n_cols;
   //calculate number of pairs possible to calculate weights matrix w_ij
   int num_pairs = n*(n-1)/2;
   //initialize weight matrix of num_pairs x 1 dimensions
@@ -23,7 +23,7 @@ arma::mat ComputeWeights_c(const arma::mat& X, double mu) {
   {
     for(int j = i+1; j < n; j++)
     {
-      weights.row(k-1) = exp(-mu*pow(arma::norm(X.row(i) - X.row(j), "fro"),2));
+      weights.row(k-1) = exp(-mu*pow(arma::norm(X.col(i) - X.col(j), "fro"),2));
       k = k + 1;
     }
   }
