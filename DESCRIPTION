@@ -4,6 +4,7 @@ Title: ADMM algorithm for convex clustering
 Version: 1.0.0
 Date: 2021-11-15
 Author: person("Sowmya", "Kolluru", email = "sowmyakolluru@tamu.edu", role = c("aut", "cre"))
+Maintainer: Sowmya Kolluru <sowmyakolluru@tamu.edum>
 Description: This package implements convex clustering algorithm. In particular, it uses alternate direction of multipliers methos algorithm to solve convex clustering problem.
 License: GPL (>= 3)
 Encoding: UTF-8
