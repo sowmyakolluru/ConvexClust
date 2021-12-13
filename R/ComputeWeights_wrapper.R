@@ -11,10 +11,11 @@
 #' @export
 #'
 #' @examples
-#' data(mammals)
-#' X <- as.matrix(mammals[,-1])
-#' X <- t(scale(X,center=TRUE,scale=FALSE))
-#' ComputeWeights(X, mu =1)
+#' #Test on multidimensional case
+#' X = matrix(c(rep(1, 10), rep(0, 10)))
+#' multipleDimensionX = t(cbind(X, X, X))
+#' w <- ComputeWeights(multipleDimensionX, mu = 1)
+#'
 #'
 ComputeWeights <- function(X, mu){
 
