@@ -57,7 +57,7 @@ Rcpp::List edges_c(const arma::mat& w, int n){
     arma::uvec group1 = find(index.col(0) == i+1) +1 ;
     //store the number of elements in group1 at each iteration
     sizes1(i) = group1.n_elem;
-    Rcpp::Rcout << sizes1(i) << std::endl;
+    //Rcpp::Rcout << sizes1(i) << std::endl;
     if (sizes1(i) > 0) {
       for(int j = 0; j < group1.n_elem; j++)
       {
