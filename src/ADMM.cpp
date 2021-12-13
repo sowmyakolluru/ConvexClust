@@ -8,52 +8,117 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 
 
-arma::colvec xbar_c(arma::mat& X, int p, int q) {
+//function returns means of rows of data matrix
+//X - data matrix p by n
+//n - number of data points
+//p - number of features
+arma::colvec xbar_c(arma::mat& X, int n, int p) {
   // Initialize required parameters
-  arma::colvec xbar(q);
-  for(int i = 0; i < q; i++)
+  arma::colvec xbar(p);
+  for(int i = 0; i < p; i++)
   {
-    int sum = 0;
-    for(int j = 0; j < p; j++)
+    double sum = 0;
+    for(int j = 0; j < n; j++)
     {
       sum = sum + X(i,j);
     }
-    xbar(i) = sum/p;
+    xbar(i) = sum/n;
 
   }
   //return xbar vector
   return(xbar);
 }
 
-double primal_residual_c(arma::mat& U, arma::mat& V, arma::mat& index,int p, int q, int nK) {
+arma::vec prox(arma::colvec& z, int n, double tau) {
+  int i;
+  double y;
+  arma::colvec pro(n);
+  for (i = 0; i < n; i++) {
+    y = z(i);
+    pro(i) = 0.0;
+    if (y > tau){
+      pro(i) = y - tau;
+    }
+    else if (y < -tau){
+      pro(i) = y + tau;
+    }
+  }
+  return pro;
+}
+
+
+arma::mat update_U(arma::mat& X, arma::mat& H, arma::mat& U, arma::mat& V,arma::colvec xbar, int n, int p,
+                   arma::mat& Matrix_index1,arma::mat& Matrix_index2,arma::colvec sizes1, arma::colvec sizes2, int M1, int M2, int tau) {
+  int i, j, k;
+  double multiplier;
+  double yi;
+  int index1;
+  multiplier = 1/(1 + n*(tau));
+  for (j = 0; j < n; j++) {
+    for (i = 0; i < p; i++) {
+      yi = X(i,j);
+      if (sizes1(i) > 0){
+        for (k = 0; k < sizes1(j); k++) {
+          index1 = i + Matrix_index1(k,j);
+          yi = yi +  H(i,index1) + (tau)*V(i,index1);
+        }
+      }
+      if (sizes2(j) > 0){
+        for (k = 0; k < sizes2(j); k++) {
+          index1 = i + Matrix_index2(k,j);
+          yi = yi -  H(i,index1) + (tau)*V(i,index1);
+        }
+      }
+      U.col(i) = multiplier * yi + (1.0 - multiplier)*xbar;
+    }
+  }
+  return U;
+}
+
+
+arma::mat update_V(arma::mat& H, arma::mat& U, arma::mat& V,arma::colvec xbar, int nk, int p,double gamma,
+                   arma::mat& w,arma::colvec index, double tau) {
+  int  d;
+  arma::colvec z(p);
+  arma::colvec index_1 = index.col(0);
+  arma::colvec index_2 = index.col(1);
+  for (d = 0; d < nk; d++) {
+    z = U.col(index_1(d) - 1) - U.col(index_2(d) - 1) - (1.0/(tau))*H.col(d);
+    V.col(d) = prox(z,p,w(d,0)*(gamma)/(tau));
+  }
+  return V;
+}
+
+
+arma::mat H_update(arma::mat& X, arma::mat& H, arma::mat& index, arma::mat& U, arma::mat& V, int tau, int p, int q, int nK) {
   // Initialize required parameters
-  arma::mat L(q,nK);
-  arma::colvec index_1 = index.col(1);
-  arma::colvec index_2 = index.col(2);
-  for(int i = 0; i < nK; i++){
-     L.col(i) = U.col(index_1(i)) - U.col(index_2(i));
+  int i;
+  arma::colvec index_1 = index.col(0) ;
+  //Rcpp::Rcout << index_1 << std::endl;
+  arma::colvec index_2 = index.col(1) ;
+  for (i = 0; i < nK; i++){
+      H.col(i) = H.col(i) - tau * (U.col(index_1(i) - 1) - U.col(index_2(i) - 1) - V.col(i));
   }
-  double residual_primal = sqrt(arma::accu(arma::pow(L - V, 2)));
-  //return residual_primal vector
-  return(residual_primal);
+  //return update_H matrix
+  return(H);
 }
 
-arma::colvec vector_1(arma::colvec& Y, int j, int p, arma::colvec& k, int n) {
-  for(int i = 0; i < n; i++)
-  {
-    k(i) = p * (Y(i) - 1) - Y(i) * (Y(i) - 1)/2 + j - Y(i);
+//ADMM c++ algorithm
+// [[Rcpp::export]]
+Rcpp::List ADMM_c(arma::mat &X,arma::mat &H,arma::mat &U,arma::mat &V,arma::mat &index,arma::mat &Matrix_index1,
+                  arma::mat &Matrix_index2,arma::vec &sizes1,arma::vec &sizes2,int M1,int M2,arma::vec &w,
+                  int p, int n,int nk, double gamma,double tau,int num_iter=100){
+  int i;
+  arma::mat V_old(p, nk);
+  arma::vec xbar = xbar_c(X,p,n);
+  for(i = 0; i < num_iter; i++){
+    V_old = V;
+    U = update_U(X,H,U,V,xbar,n,p,Matrix_index1,Matrix_index2,sizes1,sizes2,M1,M2,tau);
+    V = update_V(H,U,V,xbar,nk,p,gamma,w,index,tau);
+    H = H_update(X,H,index,U,V,tau,p,n,nk);
   }
-  //return the index value
-  return(k);
-}
-
-arma::colvec vector_2(int e, arma::colvec& Y, int p, arma::colvec& k, int n) {
-  for(int i = 0; i < n; i++)
-  {
-    k(i) = p * (e - 1) - e*(e - 1)/2 + Y(i) - e;
-  }
-  //return the index value
-  return(k);
+  // Create named list
+  return Rcpp::List::create(Rcpp::Named("U") = U,Rcpp::Named("V") = V,Rcpp::Named("H") = H);
 }
 
 
