@@ -11,6 +11,34 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// ADMM_c
+Rcpp::List ADMM_c(arma::mat& X, arma::mat& H, arma::mat& U, arma::mat& V, arma::mat& index, arma::mat& Matrix_index1, arma::mat& Matrix_index2, arma::vec& sizes1, arma::vec& sizes2, int M1, int M2, arma::vec& w, int p, int n, int nk, double gamma, double tau, int num_iter);
+RcppExport SEXP _ConvexClust_ADMM_c(SEXP XSEXP, SEXP HSEXP, SEXP USEXP, SEXP VSEXP, SEXP indexSEXP, SEXP Matrix_index1SEXP, SEXP Matrix_index2SEXP, SEXP sizes1SEXP, SEXP sizes2SEXP, SEXP M1SEXP, SEXP M2SEXP, SEXP wSEXP, SEXP pSEXP, SEXP nSEXP, SEXP nkSEXP, SEXP gammaSEXP, SEXP tauSEXP, SEXP num_iterSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::mat& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type H(HSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type U(USEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type V(VSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type index(indexSEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type Matrix_index1(Matrix_index1SEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type Matrix_index2(Matrix_index2SEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type sizes1(sizes1SEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type sizes2(sizes2SEXP);
+    Rcpp::traits::input_parameter< int >::type M1(M1SEXP);
+    Rcpp::traits::input_parameter< int >::type M2(M2SEXP);
+    Rcpp::traits::input_parameter< arma::vec& >::type w(wSEXP);
+    Rcpp::traits::input_parameter< int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type nk(nkSEXP);
+    Rcpp::traits::input_parameter< double >::type gamma(gammaSEXP);
+    Rcpp::traits::input_parameter< double >::type tau(tauSEXP);
+    Rcpp::traits::input_parameter< int >::type num_iter(num_iterSEXP);
+    rcpp_result_gen = Rcpp::wrap(ADMM_c(X, H, U, V, index, Matrix_index1, Matrix_index2, sizes1, sizes2, M1, M2, w, p, n, nk, gamma, tau, num_iter));
+    return rcpp_result_gen;
+END_RCPP
+}
 // ComputeWeights_c
 arma::mat ComputeWeights_c(const arma::mat& X, double mu);
 RcppExport SEXP _ConvexClust_ComputeWeights_c(SEXP XSEXP, SEXP muSEXP) {
@@ -23,56 +51,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// rcpparma_hello_world
-arma::mat rcpparma_hello_world();
-RcppExport SEXP _ConvexClust_rcpparma_hello_world() {
+// edges_c
+Rcpp::List edges_c(const arma::mat& w, int n);
+RcppExport SEXP _ConvexClust_edges_c(SEXP wSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(rcpparma_hello_world());
-    return rcpp_result_gen;
-END_RCPP
-}
-// rcpparma_outerproduct
-arma::mat rcpparma_outerproduct(const arma::colvec& x);
-RcppExport SEXP _ConvexClust_rcpparma_outerproduct(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::colvec& >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpparma_outerproduct(x));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rcpparma_innerproduct
-double rcpparma_innerproduct(const arma::colvec& x);
-RcppExport SEXP _ConvexClust_rcpparma_innerproduct(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::colvec& >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpparma_innerproduct(x));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rcpparma_bothproducts
-Rcpp::List rcpparma_bothproducts(const arma::colvec& x);
-RcppExport SEXP _ConvexClust_rcpparma_bothproducts(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::colvec& >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpparma_bothproducts(x));
+    Rcpp::traits::input_parameter< const arma::mat& >::type w(wSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(edges_c(w, n));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_ConvexClust_ADMM_c", (DL_FUNC) &_ConvexClust_ADMM_c, 18},
     {"_ConvexClust_ComputeWeights_c", (DL_FUNC) &_ConvexClust_ComputeWeights_c, 2},
-    {"_ConvexClust_rcpparma_hello_world", (DL_FUNC) &_ConvexClust_rcpparma_hello_world, 0},
-    {"_ConvexClust_rcpparma_outerproduct", (DL_FUNC) &_ConvexClust_rcpparma_outerproduct, 1},
-    {"_ConvexClust_rcpparma_innerproduct", (DL_FUNC) &_ConvexClust_rcpparma_innerproduct, 1},
-    {"_ConvexClust_rcpparma_bothproducts", (DL_FUNC) &_ConvexClust_rcpparma_bothproducts, 1},
+    {"_ConvexClust_edges_c", (DL_FUNC) &_ConvexClust_edges_c, 2},
     {NULL, NULL, 0}
 };
 
